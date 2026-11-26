@@ -1,0 +1,34 @@
+{
+  "models": [
+    {
+      "model_id": "PD_MODEL_2025",
+      "model_type": "Corporate PD Scorecard",
+      "validation_status": "APPROVED",
+      "last_validated": "2025-11-20",
+      "known_limitations": [
+        "Training window does not reflect sharp commodity input spikes above 15%.",
+        "Limited coverage of mid-corporate auto-ancillary and EPC sub-contractors."
+      ],
+      "drift_metrics": {
+        "psi": 0.08,
+        "gini": 0.62,
+        "ks": 0.41
+      }
+    },
+    {
+      "model_id": "EWS_COVENANT_V3",
+      "model_type": "Early Warning & Covenant Stress Model",
+      "validation_status": "CONDITIONAL",
+      "last_validated": "2026-04-10",
+      "known_limitations": [
+        "Evaluates borrower-level ratios independently; does not model multi-hop supplier pass-through.",
+        "Receivables delay signals lag quarterly statutory disclosures."
+      ],
+      "drift_metrics": {
+        "psi": 0.16,
+        "gini": 0.58,
+        "ks": 0.37
+      }
+    }
+  ]
+}

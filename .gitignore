@@ -1,0 +1,35 @@
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Python Bytecode & Caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# Runtime Logs & Local Persistent History
+logs/
+*.jsonl
+data/published_analyses.json
+
+# Build / Distribution
+build/
+dist/
+*.egg-info/
+
+# OS & Editor Artifacts
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+*.swo

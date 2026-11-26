@@ -1,0 +1,186 @@
+{
+  "documents": [
+    {
+      "doc_id": "DX-8801",
+      "company_id": "AUTO_SUP_A",
+      "doc_type": "Annual Report",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Sahyadri Stamping & Forgings sources ~45% of cold-rolled coil from Bharat Blast Steel Ltd under quarterly supply agreements.",
+      "entities": ["Bharat Blast Steel Ltd", "Sahyadri Stamping & Forgings"],
+      "confidence": 0.91
+    },
+    {
+      "doc_id": "DX-8871",
+      "company_id": "AUTO_SUP_B",
+      "doc_type": "Annual Report",
+      "fiscal_year": "FY2024",
+      "extracted_text": "Kaveri Chassis & Drivetrain sources ~35% of specialty alloy steel from Bharat Blast Steel Ltd; no FY2025 supply annexure filed yet.",
+      "entities": ["Bharat Blast Steel Ltd", "Kaveri Chassis & Drivetrain"],
+      "confidence": 0.87
+    },
+    {
+      "doc_id": "DX-8872",
+      "company_id": "AUTO_SUP_B",
+      "doc_type": "Credit Filing",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Secondary flat-steel allocation (~25%) is purchased on spot/short-term terms from Deccan Alloy & Flat Mills.",
+      "entities": ["Deccan Alloy & Flat Mills", "Kaveri Chassis & Drivetrain"],
+      "confidence": 0.78
+    },
+    {
+      "doc_id": "DX-8910",
+      "company_id": "AUTO_SUP_C",
+      "doc_type": "Annual Report",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Malwa Precision Fasteners depends on Deccan Alloy & Flat Mills for ~40% of wire-rod and alloy bar feedstock.",
+      "entities": ["Deccan Alloy & Flat Mills", "Malwa Precision Fasteners"],
+      "confidence": 0.84
+    },
+    {
+      "doc_id": "DX-8944",
+      "company_id": "INFRA_A",
+      "doc_type": "Rating Note",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Vanguard Infra EPC Ltd procures ~38% of structural steel requirements from Bharat Blast Steel Ltd for highway and bridge packages.",
+      "entities": ["Bharat Blast Steel Ltd", "Vanguard Infra EPC Ltd"],
+      "confidence": 0.86
+    },
+    {
+      "doc_id": "DX-8950",
+      "company_id": "INFRA_B",
+      "doc_type": "Annual Report",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Narmada Bridges & Transit maintains a ~30% rebar and girder supply dependency on Deccan Alloy & Flat Mills.",
+      "entities": ["Deccan Alloy & Flat Mills", "Narmada Bridges & Transit"],
+      "confidence": 0.80
+    },
+    {
+      "doc_id": "DX-9002",
+      "company_id": "OEM_A",
+      "doc_type": "Annual Report",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Vayu Motors Passenger & Utility relies on Sahyadri Stamping & Forgings for ~42% of stamped body panels.",
+      "entities": ["Sahyadri Stamping & Forgings", "Vayu Motors Passenger & Utility"],
+      "confidence": 0.90
+    },
+    {
+      "doc_id": "DX-9015",
+      "company_id": "OEM_B",
+      "doc_type": "Annual Report",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Konkan Commercial Vehicles sources ~50% of heavy drivetrain assemblies from Kaveri Chassis & Drivetrain.",
+      "entities": ["Kaveri Chassis & Drivetrain", "Konkan Commercial Vehicles"],
+      "confidence": 0.88
+    },
+    {
+      "doc_id": "DX-9021",
+      "company_id": "OEM_B",
+      "doc_type": "Investor Presentation",
+      "fiscal_year": "FY2024",
+      "extracted_text": "High-tensile fasteners (~22% share) are sourced from Malwa Precision Fasteners; older FY2024 deck referenced.",
+      "entities": ["Malwa Precision Fasteners", "Konkan Commercial Vehicles"],
+      "confidence": 0.76
+    },
+    {
+      "doc_id": "DX-9104",
+      "company_id": "INFRA_C",
+      "doc_type": "Subcontract Disclosure",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Deccan Urban Metro Structures subcontracts ~28% of structural steel erection work to Vanguard Infra EPC Ltd.",
+      "entities": ["Vanguard Infra EPC Ltd", "Deccan Urban Metro Structures"],
+      "confidence": 0.74
+    }
+  ],
+  "edges": [
+    {
+      "source_id": "STEEL_A",
+      "target_id": "AUTO_SUP_A",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.45,
+      "evidence_doc_id": "DX-8801",
+      "evidence_quote": "Sources ~45% of cold-rolled coil from Bharat Blast Steel Ltd under quarterly supply agreements.",
+      "confidence": 0.91
+    },
+    {
+      "source_id": "STEEL_A",
+      "target_id": "AUTO_SUP_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.35,
+      "evidence_doc_id": "DX-8871",
+      "evidence_quote": "Sources ~35% of specialty alloy steel from Bharat Blast Steel Ltd; no FY2025 supply annexure filed yet.",
+      "confidence": 0.87
+    },
+    {
+      "source_id": "STEEL_B",
+      "target_id": "AUTO_SUP_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.25,
+      "evidence_doc_id": "DX-8872",
+      "evidence_quote": "Secondary flat-steel allocation (~25%) is purchased on spot/short-term terms from Deccan Alloy & Flat Mills.",
+      "confidence": 0.78
+    },
+    {
+      "source_id": "STEEL_B",
+      "target_id": "AUTO_SUP_C",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.40,
+      "evidence_doc_id": "DX-8910",
+      "evidence_quote": "Malwa Precision Fasteners depends on Deccan Alloy & Flat Mills for ~40% of wire-rod and alloy bar feedstock.",
+      "confidence": 0.84
+    },
+    {
+      "source_id": "STEEL_A",
+      "target_id": "INFRA_A",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.38,
+      "evidence_doc_id": "DX-8944",
+      "evidence_quote": "Vanguard Infra EPC Ltd procures ~38% of structural steel requirements from Bharat Blast Steel Ltd.",
+      "confidence": 0.86
+    },
+    {
+      "source_id": "STEEL_B",
+      "target_id": "INFRA_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.30,
+      "evidence_doc_id": "DX-8950",
+      "evidence_quote": "Narmada Bridges & Transit maintains a ~30% rebar and girder supply dependency on Deccan Alloy & Flat Mills.",
+      "confidence": 0.80
+    },
+    {
+      "source_id": "AUTO_SUP_A",
+      "target_id": "OEM_A",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.42,
+      "evidence_doc_id": "DX-9002",
+      "evidence_quote": "Vayu Motors Passenger & Utility relies on Sahyadri Stamping & Forgings for ~42% of stamped body panels.",
+      "confidence": 0.90
+    },
+    {
+      "source_id": "AUTO_SUP_B",
+      "target_id": "OEM_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.50,
+      "evidence_doc_id": "DX-9015",
+      "evidence_quote": "Konkan Commercial Vehicles sources ~50% of heavy drivetrain assemblies from Kaveri Chassis & Drivetrain.",
+      "confidence": 0.88
+    },
+    {
+      "source_id": "AUTO_SUP_C",
+      "target_id": "OEM_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.22,
+      "evidence_doc_id": "DX-9021",
+      "evidence_quote": "High-tensile fasteners (~22% share) are sourced from Malwa Precision Fasteners; older FY2024 deck referenced.",
+      "confidence": 0.76
+    },
+    {
+      "source_id": "INFRA_A",
+      "target_id": "INFRA_C",
+      "relationship": "SUBCONTRACTS_TO",
+      "dependency_pct": 0.28,
+      "evidence_doc_id": "DX-9104",
+      "evidence_quote": "Deccan Urban Metro Structures subcontracts ~28% of structural steel erection work to Vanguard Infra EPC Ltd.",
+      "confidence": 0.74
+    }
+  ]
+}

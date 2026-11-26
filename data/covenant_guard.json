@@ -1,0 +1,192 @@
+{
+  "records": [
+    {
+      "company_id": "STEEL_A",
+      "company_name": "Bharat Blast Steel Ltd",
+      "covenants": [
+        {
+          "covenant_id": "CG-101",
+          "metric_type": "DSCR",
+          "threshold": 1.30,
+          "current_value": 2.47,
+          "status": "COMPLIANT",
+          "as_of_date": "2026-09-30",
+          "headroom_pct": 90.0
+        }
+      ],
+      "ews_signals": [
+        {
+          "signal_id": "EWS-101",
+          "severity": "MEDIUM",
+          "description": "Coking coal import shipment lead time increased by 14 days.",
+          "detected_at": "2026-10-18"
+        }
+      ]
+    },
+    {
+      "company_id": "STEEL_B",
+      "company_name": "Deccan Alloy & Flat Mills",
+      "covenants": [
+        {
+          "covenant_id": "CG-102",
+          "metric_type": "DSCR",
+          "threshold": 1.25,
+          "current_value": 1.60,
+          "status": "COMPLIANT",
+          "as_of_date": "2026-09-30",
+          "headroom_pct": 28.0
+        }
+      ],
+      "ews_signals": [
+        {
+          "signal_id": "EWS-118",
+          "severity": "HIGH",
+          "description": "Spot coking coal procurement share above internal policy band.",
+          "detected_at": "2026-11-02"
+        }
+      ]
+    },
+    {
+      "company_id": "AUTO_SUP_A",
+      "company_name": "Sahyadri Stamping & Forgings",
+      "covenants": [
+        {
+          "covenant_id": "CG-201",
+          "metric_type": "DSCR",
+          "threshold": 1.30,
+          "current_value": 1.83,
+          "status": "COMPLIANT",
+          "as_of_date": "2026-09-30",
+          "headroom_pct": 40.8
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "AUTO_SUP_B",
+      "company_name": "Kaveri Chassis & Drivetrain",
+      "covenants": [
+        {
+          "covenant_id": "CG-202",
+          "metric_type": "DSCR",
+          "threshold": 1.20,
+          "current_value": 1.05,
+          "status": "BREACH",
+          "as_of_date": "2026-09-30",
+          "headroom_pct": -12.5
+        }
+      ],
+      "ews_signals": [
+        {
+          "signal_id": "EWS-042",
+          "severity": "HIGH",
+          "description": "Delayed receivables from top customer stretching working capital.",
+          "detected_at": "2026-10-29"
+        }
+      ]
+    },
+    {
+      "company_id": "AUTO_SUP_C",
+      "company_name": "Malwa Precision Fasteners",
+      "covenants": [
+        {
+          "covenant_id": "CG-203",
+          "metric_type": "DSCR",
+          "threshold": 1.25,
+          "current_value": 1.55,
+          "status": "COMPLIANT",
+          "as_of_date": "2026-09-30",
+          "headroom_pct": 24.0
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "OEM_A",
+      "company_name": "Vayu Motors Passenger & Utility",
+      "covenants": [
+        {
+          "covenant_id": "CG-301",
+          "metric_type": "DSCR",
+          "threshold": 1.50,
+          "current_value": 3.22,
+          "status": "COMPLIANT",
+          "as_of_date": "2026-09-30",
+          "headroom_pct": 114.7
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "OEM_B",
+      "company_name": "Konkan Commercial Vehicles",
+      "covenants": [
+        {
+          "covenant_id": "CG-302",
+          "metric_type": "DSCR",
+          "threshold": 1.35,
+          "current_value": 2.09,
+          "status": "COMPLIANT",
+          "as_of_date": "2026-09-30",
+          "headroom_pct": 54.8
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "INFRA_A",
+      "company_name": "Vanguard Infra EPC Ltd",
+      "covenants": [
+        {
+          "covenant_id": "CG-401",
+          "metric_type": "DSCR",
+          "threshold": 1.25,
+          "current_value": 1.27,
+          "status": "WATCH",
+          "as_of_date": "2026-09-30",
+          "headroom_pct": 1.6
+        }
+      ],
+      "ews_signals": [
+        {
+          "signal_id": "EWS-204",
+          "severity": "MEDIUM",
+          "description": "Working capital cycle stretching in municipal EPC billing.",
+          "detected_at": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "company_id": "INFRA_B",
+      "company_name": "Narmada Bridges & Transit",
+      "covenants": [
+        {
+          "covenant_id": "CG-402",
+          "metric_type": "DSCR",
+          "threshold": 1.30,
+          "current_value": 1.48,
+          "status": "COMPLIANT",
+          "as_of_date": "2026-09-30",
+          "headroom_pct": 13.8
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "INFRA_C",
+      "company_name": "Deccan Urban Metro Structures",
+      "covenants": [
+        {
+          "covenant_id": "CG-403",
+          "metric_type": "DSCR",
+          "threshold": 1.20,
+          "current_value": 1.50,
+          "status": "COMPLIANT",
+          "as_of_date": "2026-09-30",
+          "headroom_pct": 25.0
+        }
+      ],
+      "ews_signals": []
+    }
+  ]
+}
