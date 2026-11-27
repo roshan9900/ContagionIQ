@@ -103,3 +103,16 @@ def test_build_chat_client_supports_gemini_lowercase_env_vars(monkeypatch: pytes
 
     assert isinstance(client, GeminiChatClient)
     assert client.model == "gemini-3.1-flash-lite"
+
+
+def test_build_chat_client_supports_decoupled_llm_config_override(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("LLM_PROVIDER", "local")
+    client = build_chat_client(
+        llm_config={
+            "provider": "gemini",
+            "model": "gemini-3.8-flash",
+            "api_key": "override-key",
+        }
+    )
+    assert isinstance(client, GeminiChatClient)
+    assert client.model == "gemini-3.8-flash"

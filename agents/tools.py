@@ -1,5 +1,7 @@
 from __future__ import annotations
 import json
+import os
+from pathlib import Path
 from typing import Annotated, Any
 from agent_framework import tool
 from pydantic import Field
@@ -10,13 +12,33 @@ from adapters.model_infinity import ModelInfinityAdapter
 from engine.financials import FinancialStressEngine
 from engine.graph import SupplyChainGraphEngine
 
-_i360_adapter = I360Adapter()
-_covenant_adapter = CovenantGuardAdapter()
-_xmin_adapter = DataXMineAdapter()
-_model_adapter = ModelInfinityAdapter()
+_RUNTIME_CACHE: dict[str, tuple[I360Adapter, CovenantGuardAdapter, DataXMineAdapter, ModelInfinityAdapter, SupplyChainGraphEngine, FinancialStressEngine]] = {}
 
-_graph_engine = SupplyChainGraphEngine(_xmin_adapter.list_edges())
-_financial_engine = FinancialStressEngine(raw_material_share_of_cogs=0.55)
+
+def _get_runtime() -> tuple[
+    I360Adapter,
+    CovenantGuardAdapter,
+    DataXMineAdapter,
+    ModelInfinityAdapter,
+    SupplyChainGraphEngine,
+    FinancialStressEngine,
+]:
+    data_dir = Path(
+        os.getenv(
+            "CONTAGIONIQ_DATA_DIR",
+            str(Path(__file__).resolve().parent.parent / "data"),
+        )
+    )
+    key = str(data_dir)
+    if key not in _RUNTIME_CACHE:
+        i360 = I360Adapter(data_path=data_dir / "i360.json")
+        cov = CovenantGuardAdapter(data_path=data_dir / "covenant_guard.json")
+        xmine = DataXMineAdapter(data_path=data_dir / "data_xmine.json")
+        models = ModelInfinityAdapter(data_path=data_dir / "model_infinity.json")
+        graph = SupplyChainGraphEngine(xmine.list_edges())
+        fin = FinancialStressEngine(raw_material_share_of_cogs=0.55)
+        _RUNTIME_CACHE[key] = (i360, cov, xmine, models, graph, fin)
+    return _RUNTIME_CACHE[key]
 
 
 @tool
@@ -44,6 +66,7 @@ def analyze_supply_chain_contagion(
     if max_hops < 0:
         raise ValueError("max_hops must be non-negative")
 
+    _i360_adapter, _covenant_adapter, _, _model_adapter, _graph_engine, _financial_engine = _get_runtime()
     seed_companies = _i360_adapter.list_companies(sector=primary_sector)
     seed_id = [c.company_id for c in seed_companies]
     model_governance = [model.model_dump() for model in _model_adapter.list_models()]
@@ -116,6 +139,7 @@ def get_company_evidence_and_model_audit(
     Retrieves Data XMine extracted filings and Model Infinity validation metadata
     for a specific company so risk challenges can cite concrete documents and model caveats.
     """
+    _i360_adapter, _, _xmin_adapter, _model_adapter, _, _ = _get_runtime()
     company = _i360_adapter.get_company(company_id=company_id)
     if company is None:
         raise ValueError(f"Unknown company ID: {company_id}")

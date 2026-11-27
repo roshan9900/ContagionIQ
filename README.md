@@ -39,8 +39,67 @@
 * **Multi-Provider LLM Support**
   * Supports **Google Gemini** (`GeminiChatClient`), **Groq** (`OpenAIChatCompletionClient`), and **Local Ollama** (`OpenAIChatClient`).
 * **Verified Test Suite & Complete Documentation**
-  * **14/14 passing unit tests** (`tests/`) covering financial stress math, 2-hop graph traversal, tool validation, CLI rendering, persistent history filters, and JSONL audit logging.
+  * **17/17 passing unit tests** (`tests/`) covering financial stress math, 2-hop graph traversal, tool validation, CLI rendering, persistent history filters, decoupled LLM config overrides, Indian FY25 dataset validation, and JSONL audit logging.
   * Full documentation across [`README.md`](README.md) and [`UI_GUIDE.md`](UI_GUIDE.md) (plain-English guide to every chart, KPI, and report section).
+
+---
+
+## Services & Tech Stack
+
+| Layer | Service / Technology | Role in ContagionIQ |
+|---|---|---|
+| **UI & Visualization** | **Streamlit**, **Plotly** | Dark-themed executive dashboard, interactive supply-chain network graphs, DSCR comparison bars, CSV/Markdown exports |
+| **Agent Orchestration** | **Microsoft Agent Framework (`agent-framework`)** | `SequentialBuilder` 4-agent pipeline (`ShockAnalyst → ExposureInvestigator → RiskChallenger → ReportSynthesizer`) & `@tool` bindings |
+| **LLM Providers (Decoupled)** | **Google Gemini**, **Groq Cloud**, **Local Ollama** | Runtime-selectable via UI sidebar or `.env` (`GeminiChatClient`, `OpenAIChatCompletionClient`, `OpenAIChatClient`) |
+| **Deterministic Engines** | **Pandas**, **NetworkX** | Multi-hop BFS pass-through graph traversal & deterministic EBITDA/margin/DSCR/WC-drag stress math |
+| **Data Contracts** | **Pydantic v2** | Strict schema validation across all 4 enterprise data adapters |
+| **Persistence & Telemetry** | **JSON / JSONL** | Persistent HITL saved analyses (`data/published_analyses.json`) and structured audit logs (`logs/investigation_audit.jsonl`) |
+| **Testing & Config** | **Pytest**, **python-dotenv** | Automated verification suite (`17/17` tests) and environment/secret loading |
+
+---
+
+## System Design & Data Flow
+
+```mermaid
+flowchart LR
+    subgraph Data["Data Layer (data_india/)"]
+        I360["i360.json\n(14 Indian Companies)"]
+        CG["covenant_guard.json\n(Covenants & EWS)"]
+        DX["data_xmine.json\n(Filings & 17 Edges)"]
+        MI["model_infinity.json\n(Model Governance)"]
+    end
+
+    subgraph Core["Deterministic Engines"]
+        GE["SupplyChainGraphEngine\n(NetworkX BFS)"]
+        FE["FinancialStressEngine\n(Pandas Stress Math)"]
+    end
+
+    subgraph Agents["4-Agent MAF Workflow"]
+        A1["1. ShockAnalyst"]
+        A2["2. ExposureInvestigator"]
+        A3["3. RiskChallenger"]
+        A4["4. ReportSynthesizer"]
+        A1 --> A2 --> A3 --> A4
+    end
+
+    subgraph App["Presentation & Persistence"]
+        UI["Streamlit UI (app.py)\nSidebar LLM Config + Charts"]
+        HIST["data/published_analyses.json\n(HITL Saved History)"]
+        LOG["logs/investigation_audit.jsonl\n(Observability Telemetry)"]
+    end
+
+    I360 & CG & DX & MI --> Core
+    Core --> A2 & A3
+    Core --> UI
+    A4 --> UI
+    UI --> HIST
+    UI --> LOG
+```
+
+1. **Data Ingestion (`adapters/`)**: Loads and validates company financials, bank covenants, filing evidence, and model-risk metadata via Pydantic v2.
+2. **Deterministic Computation (`engine/`)**: Computes exact multi-hop pass-through factors and stressed DSCR/EBITDA/WC drag in Python—**no LLM ever invents financial numbers**.
+3. **4-Agent AI Review (`agents/`)**: `ShockAnalyst` extracts the shock → `ExposureInvestigator` calls `analyze_supply_chain_contagion` → `RiskChallenger` audits filings & Model Infinity limits via `get_company_evidence_and_model_audit` → `ReportSynthesizer` writes the 5-section Markdown brief.
+4. **Human-in-the-Loop & Audit (`app.py`, `observability/`)**: Analysts inspect charts, approve/hold the report to `data/published_analyses.json`, and every run's latency, cited docs, and status is logged to `logs/investigation_audit.jsonl`.
 
 ---
 
@@ -51,6 +110,7 @@ ContagionIQ/
 ├── app.py                        # Dark-themed Streamlit + Plotly executive workbench
 ├── demo.py                       # CLI runner for the 4-agent workflow
 ├── requirements.txt              # Python dependencies
+├── UI_GUIDE.md                   # Non-technical guide to reading the UI, charts, and reports
 ├── adapters/                     # Pydantic-validated data adapters
 │   ├── i360.py                   # Company financials & sector shocks
 │   ├── covenant_guard.py         # Bank covenant thresholds & EWS signals
@@ -58,24 +118,25 @@ ContagionIQ/
 │   └── model_infinity.py         # Model validation status, limitations & drift metrics
 ├── agents/
 │   ├── tools.py                  # Agent tools (contagion analysis, evidence audit, HITL publish)
-│   └── workflow.py               # 4-agent MAF SequentialBuilder workflow & LLM client builders
+│   └── workflow.py               # 4-agent MAF SequentialBuilder workflow & decoupled LLM clients
 ├── contracts/
 │   └── schema.py                 # Pydantic v2 schemas (including ContagionReport)
-├── data/
-│   ├── i360.json                 # 10 companies across Steel, Auto Components, Auto OEMs, Infrastructure
+├── data_india/                   # 14 verified FY25 Indian public companies across 6 sectors
+│   ├── i360.json                 # Tata Steel, JSW Steel, Coal India, NTPC, UltraTech, Ambuja, etc.
 │   ├── covenant_guard.json       # Covenant & EWS records
-│   ├── data_xmine.json           # 10 extracted filings & 10 directed supply edges
+│   ├── data_xmine.json           # 16 filing disclosures & 17 directed supply edges
 │   └── model_infinity.json       # PD_MODEL_2025 & EWS_COVENANT_V3 governance records
 ├── engine/
 │   ├── financials.py             # FinancialStressEngine
 │   └── graph.py                  # SupplyChainGraphEngine
 ├── observability/
 │   └── audit.py                  # InvestigationAuditLogger (JSONL telemetry)
-└── tests/                        # Pytest suite (14 tests)
+└── tests/                        # Pytest suite (17 tests)
     ├── test_app_history.py
     ├── test_contagion_tools.py
     ├── test_demo.py
     ├── test_financial.py
+    ├── test_india_dataset.py
     └── test_observability.py
 ```
 

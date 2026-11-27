@@ -1,0 +1,263 @@
+{
+  "records": [
+    {
+      "company_id": "STEEL_A",
+      "company_name": "Tata Steel Ltd (NSE: TATASTEEL)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-101",
+          "metric_type": "DSCR",
+          "threshold": 1.25,
+          "current_value": 1.35,
+          "status": "WATCH",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 8.0
+        }
+      ],
+      "ews_signals": [
+        {
+          "signal_id": "EWS-IND-101",
+          "severity": "MEDIUM",
+          "description": "High imported coking coal exposure and UK transition capex keep consolidated leverage elevated.",
+          "detected_at": "2025-05-15"
+        }
+      ]
+    },
+    {
+      "company_id": "STEEL_B",
+      "company_name": "JSW Steel Ltd (NSE: JSWSTEEL)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-102",
+          "metric_type": "DSCR",
+          "threshold": 1.25,
+          "current_value": 1.40,
+          "status": "COMPLIANT",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 12.0
+        }
+      ],
+      "ews_signals": [
+        {
+          "signal_id": "EWS-IND-102",
+          "severity": "MEDIUM",
+          "description": "Net Debt/EBITDA at 3.34x in FY25 amid brownfield steel capacity expansion.",
+          "detected_at": "2025-05-20"
+        }
+      ]
+    },
+    {
+      "company_id": "AUTO_SUP_A",
+      "company_name": "Bharat Forge Ltd (NSE: BHARATFORG)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-201",
+          "metric_type": "DSCR",
+          "threshold": 1.30,
+          "current_value": 2.10,
+          "status": "COMPLIANT",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 61.5
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "AUTO_SUP_B",
+      "company_name": "Samvardhana Motherson Intl (NSE: MOTHERSON)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-202",
+          "metric_type": "DSCR",
+          "threshold": 1.25,
+          "current_value": 1.80,
+          "status": "COMPLIANT",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 44.0
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "AUTO_SUP_C",
+      "company_name": "Sundram Fasteners Ltd (NSE: SUNDRMFAST)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-203",
+          "metric_type": "DSCR",
+          "threshold": 1.30,
+          "current_value": 3.30,
+          "status": "COMPLIANT",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 153.8
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "OEM_A",
+      "company_name": "Maruti Suzuki India Ltd (NSE: MARUTI)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-301",
+          "metric_type": "DSCR",
+          "threshold": 1.50,
+          "current_value": 40.00,
+          "status": "COMPLIANT",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 2566.7
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "OEM_B",
+      "company_name": "Tata Motors Ltd (NSE: TATAMOTORS)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-302",
+          "metric_type": "DSCR",
+          "threshold": 1.35,
+          "current_value": 3.00,
+          "status": "COMPLIANT",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 122.2
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "INFRA_A",
+      "company_name": "Dilip Buildcon Ltd (NSE: DBL)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-401",
+          "metric_type": "DSCR",
+          "threshold": 1.25,
+          "current_value": 1.30,
+          "status": "WATCH",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 4.0
+        }
+      ],
+      "ews_signals": [
+        {
+          "signal_id": "EWS-IND-201",
+          "severity": "MEDIUM",
+          "description": "Elevated working-capital cycle (92 DSO days) across EPC road & mining contracts.",
+          "detected_at": "2025-05-10"
+        }
+      ]
+    },
+    {
+      "company_id": "INFRA_B",
+      "company_name": "IRB Infrastructure Developers Ltd (NSE: IRB)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-402",
+          "metric_type": "DSCR",
+          "threshold": 1.20,
+          "current_value": 1.25,
+          "status": "WATCH",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 4.2
+        }
+      ],
+      "ews_signals": [
+        {
+          "signal_id": "EWS-IND-202",
+          "severity": "MEDIUM",
+          "description": "High consolidated SPV project borrowings (Rs 20,599 Cr) require steady toll & EPC cash flows.",
+          "detected_at": "2025-05-12"
+        }
+      ]
+    },
+    {
+      "company_id": "INFRA_C",
+      "company_name": "Larsen & Toubro Ltd (NSE: LT)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-403",
+          "metric_type": "DSCR",
+          "threshold": 1.25,
+          "current_value": 2.10,
+          "status": "COMPLIANT",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 68.0
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "ENERGY_A",
+      "company_name": "Coal India Ltd (NSE: COALINDIA)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-501",
+          "metric_type": "DSCR",
+          "threshold": 1.30,
+          "current_value": 29.98,
+          "status": "COMPLIANT",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 2206.2
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "ENERGY_B",
+      "company_name": "NTPC Ltd (NSE: NTPC)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-502",
+          "metric_type": "DSCR",
+          "threshold": 1.20,
+          "current_value": 1.30,
+          "status": "WATCH",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 8.3
+        }
+      ],
+      "ews_signals": [
+        {
+          "signal_id": "EWS-IND-501",
+          "severity": "MEDIUM",
+          "description": "High consolidated capex borrowings (Rs 2,47,575 Cr) keep thermal fuel pass-through critical.",
+          "detected_at": "2025-05-18"
+        }
+      ]
+    },
+    {
+      "company_id": "CEMENT_A",
+      "company_name": "UltraTech Cement Ltd (NSE: ULTRACEMCO)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-601",
+          "metric_type": "DSCR",
+          "threshold": 1.25,
+          "current_value": 2.00,
+          "status": "COMPLIANT",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 60.0
+        }
+      ],
+      "ews_signals": []
+    },
+    {
+      "company_id": "CEMENT_B",
+      "company_name": "Ambuja Cements Ltd (NSE: AMBUJACEM)",
+      "covenants": [
+        {
+          "covenant_id": "CG-IND-602",
+          "metric_type": "DSCR",
+          "threshold": 1.25,
+          "current_value": 20.00,
+          "status": "COMPLIANT",
+          "as_of_date": "2025-03-31",
+          "headroom_pct": 1500.0
+        }
+      ],
+      "ews_signals": []
+    }
+  ]
+}

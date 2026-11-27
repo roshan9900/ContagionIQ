@@ -63,4 +63,8 @@ def test_dscr_comparison_figure_and_provider_label(monkeypatch) -> None:
     rows = app.compute_full_stress_table(services, shock_pct=20.0, primary_sector="Steel", max_hops=2)
     fig = app.build_dscr_comparison_figure(rows)
     assert len(fig.data) == 3
-    assert len(fig.data[0].x) == 10
+    assert len(fig.data[0].x) == 14
+
+    assert app._friendly_agent_label("shockanalyst").startswith("Step 1:")
+    story = app._build_company_story(rows[0])
+    assert len(story) == 3

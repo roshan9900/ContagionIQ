@@ -1,0 +1,303 @@
+{
+  "documents": [
+    {
+      "doc_id": "DX-IND-01",
+      "company_id": "AUTO_SUP_A",
+      "doc_type": "Annual Report Disclosure",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Bharat Forge procures automotive-grade forging billets and specialty alloy steel from domestic integrated mills including Tata Steel.",
+      "entities": ["Tata Steel Ltd", "Bharat Forge Ltd"],
+      "confidence": 0.86
+    },
+    {
+      "doc_id": "DX-IND-02",
+      "company_id": "AUTO_SUP_B",
+      "doc_type": "Annual Report Disclosure",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Samvardhana Motherson sources flat and specialty steel inputs for polymer/metal assemblies from domestic steel majors including Tata Steel and JSW Steel.",
+      "entities": ["Tata Steel Ltd", "JSW Steel Ltd", "Samvardhana Motherson Intl"],
+      "confidence": 0.82
+    },
+    {
+      "doc_id": "DX-IND-03",
+      "company_id": "AUTO_SUP_C",
+      "doc_type": "Annual Report Disclosure",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Sundram Fasteners relies on alloy steel wire rods and bars from domestic primary mills including JSW Steel for high-tensile automotive fasteners.",
+      "entities": ["JSW Steel Ltd", "Sundram Fasteners Ltd"],
+      "confidence": 0.85
+    },
+    {
+      "doc_id": "DX-IND-04",
+      "company_id": "INFRA_A",
+      "doc_type": "EPC Procurement Filing",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Dilip Buildcon procures structural steel and TMT bars for highway and bridge EPC packages from primary producers including Tata Steel.",
+      "entities": ["Tata Steel Ltd", "Dilip Buildcon Ltd"],
+      "confidence": 0.83
+    },
+    {
+      "doc_id": "DX-IND-05",
+      "company_id": "INFRA_B",
+      "doc_type": "Annual Report Disclosure",
+      "fiscal_year": "FY2025",
+      "extracted_text": "IRB Infrastructure's EPC construction arm sources reinforcement steel and girders from domestic flat and long steel suppliers including JSW Steel.",
+      "entities": ["JSW Steel Ltd", "IRB Infrastructure Developers Ltd"],
+      "confidence": 0.80
+    },
+    {
+      "doc_id": "DX-IND-06",
+      "company_id": "OEM_A",
+      "doc_type": "Investor Presentation",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Maruti Suzuki sources forged powertrain and chassis components from Tier-1 domestic suppliers including Bharat Forge.",
+      "entities": ["Bharat Forge Ltd", "Maruti Suzuki India Ltd"],
+      "confidence": 0.88
+    },
+    {
+      "doc_id": "DX-IND-07",
+      "company_id": "OEM_B",
+      "doc_type": "Annual Report Disclosure",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Tata Motors sources wiring harnesses, bumpers, and interior modules from Samvardhana Motherson across domestic passenger and commercial vehicle lines.",
+      "entities": ["Samvardhana Motherson Intl", "Tata Motors Ltd"],
+      "confidence": 0.87
+    },
+    {
+      "doc_id": "DX-IND-08",
+      "company_id": "OEM_B",
+      "doc_type": "Supplier Quality Disclosure",
+      "fiscal_year": "FY2024",
+      "extracted_text": "Sundram Fasteners supplies high-tensile engine and transmission fasteners to Tata Motors commercial and passenger vehicle plants.",
+      "entities": ["Sundram Fasteners Ltd", "Tata Motors Ltd"],
+      "confidence": 0.77
+    },
+    {
+      "doc_id": "DX-IND-09",
+      "company_id": "INFRA_C",
+      "doc_type": "Subcontract Disclosure",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Larsen & Toubro engages specialized highway/civil EPC subcontractors including Dilip Buildcon on select regional packages.",
+      "entities": ["Dilip Buildcon Ltd", "Larsen & Toubro Ltd"],
+      "confidence": 0.75
+    },
+    {
+      "doc_id": "DX-IND-10",
+      "company_id": "STEEL_A",
+      "doc_type": "Annual Report Disclosure",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Tata Steel procures domestic thermal and coking coal allocations through Fuel Supply Agreements with Coal India subsidiaries.",
+      "entities": ["Coal India Ltd", "Tata Steel Ltd"],
+      "confidence": 0.89
+    },
+    {
+      "doc_id": "DX-IND-11",
+      "company_id": "ENERGY_B",
+      "doc_type": "Annual Report Disclosure",
+      "fiscal_year": "FY2025",
+      "extracted_text": "NTPC relies on Coal India for the majority of domestic coal linkages powering its base-load thermal generation fleet.",
+      "entities": ["Coal India Ltd", "NTPC Ltd"],
+      "confidence": 0.93
+    },
+    {
+      "doc_id": "DX-IND-12",
+      "company_id": "CEMENT_A",
+      "doc_type": "Annual Report Disclosure",
+      "fiscal_year": "FY2025",
+      "extracted_text": "UltraTech Cement sources domestic thermal coal for kiln and captive power plants from Coal India alongside imported petcoke.",
+      "entities": ["Coal India Ltd", "UltraTech Cement Ltd"],
+      "confidence": 0.85
+    },
+    {
+      "doc_id": "DX-IND-13",
+      "company_id": "CEMENT_B",
+      "doc_type": "Annual Report Disclosure",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Ambuja Cements maintains domestic coal supply linkages with Coal India for clinker kiln and captive thermal power operations.",
+      "entities": ["Coal India Ltd", "Ambuja Cements Ltd"],
+      "confidence": 0.84
+    },
+    {
+      "doc_id": "DX-IND-14",
+      "company_id": "INFRA_A",
+      "doc_type": "EPC Procurement Filing",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Dilip Buildcon procures bulk OPC/PPC cement for highway bridges and pavement packages from UltraTech Cement.",
+      "entities": ["UltraTech Cement Ltd", "Dilip Buildcon Ltd"],
+      "confidence": 0.82
+    },
+    {
+      "doc_id": "DX-IND-15",
+      "company_id": "INFRA_C",
+      "doc_type": "Annual Report Disclosure",
+      "fiscal_year": "FY2025",
+      "extracted_text": "Larsen & Toubro sources large-volume structural cement across metro and heavy civil projects from UltraTech Cement.",
+      "entities": ["UltraTech Cement Ltd", "Larsen & Toubro Ltd"],
+      "confidence": 0.86
+    },
+    {
+      "doc_id": "DX-IND-16",
+      "company_id": "INFRA_B",
+      "doc_type": "EPC Procurement Filing",
+      "fiscal_year": "FY2025",
+      "extracted_text": "IRB Infrastructure procures highway-grade cement for BOT/TOT road packages from Ambuja Cements.",
+      "entities": ["Ambuja Cements Ltd", "IRB Infrastructure Developers Ltd"],
+      "confidence": 0.81
+    }
+  ],
+  "edges": [
+    {
+      "source_id": "STEEL_A",
+      "target_id": "AUTO_SUP_A",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.35,
+      "evidence_doc_id": "DX-IND-01",
+      "evidence_quote": "Bharat Forge procures automotive-grade forging billets and specialty alloy steel from domestic integrated mills including Tata Steel.",
+      "confidence": 0.86
+    },
+    {
+      "source_id": "STEEL_A",
+      "target_id": "AUTO_SUP_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.28,
+      "evidence_doc_id": "DX-IND-02",
+      "evidence_quote": "Samvardhana Motherson sources flat and specialty steel inputs from domestic steel majors including Tata Steel.",
+      "confidence": 0.82
+    },
+    {
+      "source_id": "STEEL_B",
+      "target_id": "AUTO_SUP_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.25,
+      "evidence_doc_id": "DX-IND-02",
+      "evidence_quote": "Samvardhana Motherson sources flat and specialty steel inputs from domestic steel majors including JSW Steel.",
+      "confidence": 0.82
+    },
+    {
+      "source_id": "STEEL_B",
+      "target_id": "AUTO_SUP_C",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.40,
+      "evidence_doc_id": "DX-IND-03",
+      "evidence_quote": "Sundram Fasteners relies on alloy steel wire rods and bars from domestic primary mills including JSW Steel.",
+      "confidence": 0.85
+    },
+    {
+      "source_id": "STEEL_A",
+      "target_id": "INFRA_A",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.35,
+      "evidence_doc_id": "DX-IND-04",
+      "evidence_quote": "Dilip Buildcon procures structural steel and TMT bars for highway EPC packages from Tata Steel.",
+      "confidence": 0.83
+    },
+    {
+      "source_id": "STEEL_B",
+      "target_id": "INFRA_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.30,
+      "evidence_doc_id": "DX-IND-05",
+      "evidence_quote": "IRB Infrastructure's EPC arm sources reinforcement steel and girders from domestic suppliers including JSW Steel.",
+      "confidence": 0.80
+    },
+    {
+      "source_id": "AUTO_SUP_A",
+      "target_id": "OEM_A",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.32,
+      "evidence_doc_id": "DX-IND-06",
+      "evidence_quote": "Maruti Suzuki sources forged powertrain and chassis components from Bharat Forge.",
+      "confidence": 0.88
+    },
+    {
+      "source_id": "AUTO_SUP_B",
+      "target_id": "OEM_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.42,
+      "evidence_doc_id": "DX-IND-07",
+      "evidence_quote": "Tata Motors sources wiring harnesses, bumpers, and interior modules from Samvardhana Motherson.",
+      "confidence": 0.87
+    },
+    {
+      "source_id": "AUTO_SUP_C",
+      "target_id": "OEM_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.22,
+      "evidence_doc_id": "DX-IND-08",
+      "evidence_quote": "Sundram Fasteners supplies high-tensile fasteners to Tata Motors vehicle plants.",
+      "confidence": 0.77
+    },
+    {
+      "source_id": "INFRA_A",
+      "target_id": "INFRA_C",
+      "relationship": "SUBCONTRACTS_TO",
+      "dependency_pct": 0.20,
+      "evidence_doc_id": "DX-IND-09",
+      "evidence_quote": "Larsen & Toubro engages specialized civil EPC subcontractors including Dilip Buildcon on select packages.",
+      "confidence": 0.75
+    },
+    {
+      "source_id": "ENERGY_A",
+      "target_id": "STEEL_A",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.30,
+      "evidence_doc_id": "DX-IND-10",
+      "evidence_quote": "Tata Steel procures domestic thermal and coking coal allocations through Fuel Supply Agreements with Coal India.",
+      "confidence": 0.89
+    },
+    {
+      "source_id": "ENERGY_A",
+      "target_id": "ENERGY_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.45,
+      "evidence_doc_id": "DX-IND-11",
+      "evidence_quote": "NTPC relies on Coal India for the majority of domestic coal linkages powering its thermal generation fleet.",
+      "confidence": 0.93
+    },
+    {
+      "source_id": "ENERGY_A",
+      "target_id": "CEMENT_A",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.28,
+      "evidence_doc_id": "DX-IND-12",
+      "evidence_quote": "UltraTech Cement sources domestic thermal coal for kiln and captive power plants from Coal India.",
+      "confidence": 0.85
+    },
+    {
+      "source_id": "ENERGY_A",
+      "target_id": "CEMENT_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.26,
+      "evidence_doc_id": "DX-IND-13",
+      "evidence_quote": "Ambuja Cements maintains domestic coal supply linkages with Coal India for kiln and captive power.",
+      "confidence": 0.84
+    },
+    {
+      "source_id": "CEMENT_A",
+      "target_id": "INFRA_A",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.22,
+      "evidence_doc_id": "DX-IND-14",
+      "evidence_quote": "Dilip Buildcon procures bulk cement for highway bridges and pavement packages from UltraTech Cement.",
+      "confidence": 0.82
+    },
+    {
+      "source_id": "CEMENT_A",
+      "target_id": "INFRA_C",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.25,
+      "evidence_doc_id": "DX-IND-15",
+      "evidence_quote": "Larsen & Toubro sources large-volume structural cement across metro and heavy civil projects from UltraTech Cement.",
+      "confidence": 0.86
+    },
+    {
+      "source_id": "CEMENT_B",
+      "target_id": "INFRA_B",
+      "relationship": "SUPPLIES_TO",
+      "dependency_pct": 0.24,
+      "evidence_doc_id": "DX-IND-16",
+      "evidence_quote": "IRB Infrastructure procures highway-grade cement for road packages from Ambuja Cements.",
+      "confidence": 0.81
+    }
+  ]
+}

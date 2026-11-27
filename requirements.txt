@@ -1,4 +1,6 @@
 agent-framework>=1.0.0b1
+agent-framework-gemini
+google-genai>=1.0.0
 openai>=1.50.0
 pydantic>=2.7.0
 pandas>=2.2.0

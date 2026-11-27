@@ -16,69 +16,97 @@ from agents.tools import (
     publish_investigation_report
 )
 
-def build_local_llama_client()->OpenAIChatClient:
+def build_local_llama_client(
+    model: str | None = None,
+    api_key: str | None = None,
+    base_url: str | None = None,
+) -> OpenAIChatClient:
     """
     Configures OpenAIChatClient against a local Ollama OpenAI-compatible endpoint.
     Set LOCAL_LLM_MODEL (e.g. 'llama3.1' or 'llama3.2') and LOCAL_LLM_BASE_URL in .env.
     """
-    base_url = os.getenv("LOCAL_LLM_BASE_URL", "http://localhost:11434/v1")
-    model = os.getenv("LOCAL_LLM_MODEL", "llama3.1")
-    api_key = os.getenv("LOCAL_LLM_API_KEY", "ollama")
-    
+    resolved_base_url = (base_url or os.getenv("LOCAL_LLM_BASE_URL", "http://localhost:11434/v1")).strip()
+    resolved_model = (model or os.getenv("LOCAL_LLM_MODEL", "llama3.1")).strip()
+    resolved_api_key = (api_key or os.getenv("LOCAL_LLM_API_KEY", "ollama")).strip()
+
     return OpenAIChatClient(
-        model=model,
-        api_key=api_key,
-        base_url=base_url,
+        model=resolved_model,
+        api_key=resolved_api_key,
+        base_url=resolved_base_url,
     )
 
-def build_groq_client() -> OpenAIChatCompletionClient:
-    api_key = os.getenv("GROQ_API_KEY")
-    if not api_key:
+
+def build_groq_client(
+    model: str | None = None,
+    api_key: str | None = None,
+) -> OpenAIChatCompletionClient:
+    resolved_api_key = (api_key or os.getenv("GROQ_API_KEY") or "").strip()
+    if not resolved_api_key:
         raise ValueError("Set GROQ_API_KEY when LLM_PROVIDER=groq.")
 
+    resolved_model = (model or os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")).strip()
     return OpenAIChatCompletionClient(
-        model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
-        api_key=api_key,
+        model=resolved_model,
+        api_key=resolved_api_key,
         base_url="https://api.groq.com/openai/v1",
     )
 
-def build_gemini_client() -> GeminiChatClient:
-    api_key = (os.getenv("GEMINI_API_KEY") or os.getenv("gemini_api_key") or "").strip()
-    if not api_key:
+
+def build_gemini_client(
+    model: str | None = None,
+    api_key: str | None = None,
+) -> GeminiChatClient:
+    resolved_api_key = (
+        api_key or os.getenv("GEMINI_API_KEY") or os.getenv("gemini_api_key") or ""
+    ).strip()
+    if not resolved_api_key:
         raise ValueError("Set GEMINI_API_KEY (or gemini_api_key) when LLM_PROVIDER=gemini.")
 
-    model = (
-        os.getenv("GEMINI_MODEL")
+    resolved_model = (
+        model
+        or os.getenv("GEMINI_MODEL")
         or os.getenv("gemini_model")
         or "gemini-3.8-flash"
     ).strip()
     return GeminiChatClient(
-        model=model,
-        api_key=api_key,
+        model=resolved_model,
+        api_key=resolved_api_key,
     )
 
-def build_chat_client() -> OpenAIChatClient | OpenAIChatCompletionClient | GeminiChatClient:
-    provider = os.getenv("LLM_PROVIDER", "local").strip().lower()
+
+def build_chat_client(
+    llm_config: dict[str, Any] | None = None,
+) -> OpenAIChatClient | OpenAIChatCompletionClient | GeminiChatClient:
+    cfg = llm_config or {}
+    provider = str(cfg.get("provider") or os.getenv("LLM_PROVIDER", "local")).strip().lower()
+    model = cfg.get("model") or None
+    api_key = cfg.get("api_key") or None
+    base_url = cfg.get("base_url") or None
+
     if provider == "local":
-        return build_local_llama_client()
+        return build_local_llama_client(model=model, api_key=api_key, base_url=base_url)
     if provider == "groq":
-        return build_groq_client()
+        return build_groq_client(model=model, api_key=api_key)
     if provider == "gemini":
-        return build_gemini_client()
+        return build_gemini_client(model=model, api_key=api_key)
     raise ValueError(f"Unsupported LLM_PROVIDER: {provider!r}. Use 'local', 'groq', or 'gemini'.")
+
 
 def build_contagion_workflow(
     client: OpenAIChatClient | OpenAIChatCompletionClient | GeminiChatClient | None = None,
+    llm_config: dict[str, Any] | None = None,
 ) -> Any:
     """
     Builds the 4-agent sequential contagion workflow:
     ShockAnalyst -> ExposureInvestigator -> RiskChallenger -> ReportSynthesizer.
     """
-    chat_client = client or build_chat_client()
+    cfg = llm_config or {}
+    chat_client = client or build_chat_client(llm_config=cfg)
     max_tokens = None
     if isinstance(chat_client, OpenAIChatCompletionClient):
+        raw_max_tokens = cfg.get("max_tokens") or os.getenv("GROQ_MAX_TOKENS", "512")
         try:
-            max_tokens = int(os.getenv("GROQ_MAX_TOKENS", "512"))
+            max_tokens = int(raw_max_tokens)
         except ValueError as exc:
             raise ValueError("GROQ_MAX_TOKENS must be a positive integer.") from exc
         if max_tokens < 1:

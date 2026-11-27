@@ -106,15 +106,19 @@ def filter_analysis_records(
     return filtered
 
 HOP_COORDS: dict[str, tuple[float, float, int]] = {
-    # Hop 0: Primary Steel
-    "STEEL_A": (0.0, 2.2, 0),
+    # Hop 0: Upstream Energy & Primary Steel
+    "ENERGY_A": (0.0, 3.4, 0),
+    "STEEL_A": (0.0, 2.0, 0),
     "STEEL_B": (0.0, 0.4, 0),
-    # Hop 1: Auto Components & Infrastructure
+    "ENERGY_B": (0.0, -1.2, 0),
+    # Hop 1: Auto Components, Cement & Infrastructure
     "AUTO_SUP_A": (2.2, 3.3, 1),
     "AUTO_SUP_B": (2.2, 2.1, 1),
     "AUTO_SUP_C": (2.2, 0.9, 1),
     "INFRA_A": (2.2, -0.2, 1),
     "INFRA_B": (2.2, -1.4, 1),
+    "CEMENT_A": (2.2, -2.5, 1),
+    "CEMENT_B": (2.2, -3.6, 1),
     # Hop 2: Auto OEMs & Downstream Infrastructure
     "OEM_A": (4.4, 2.9, 2),
     "OEM_B": (4.4, 1.3, 2),
@@ -123,11 +127,12 @@ HOP_COORDS: dict[str, tuple[float, float, int]] = {
 
 
 @st.cache_resource
-def get_services() -> dict[str, Any]:
-    i360 = I360Adapter()
-    covenant = CovenantGuardAdapter()
-    xmine = DataXMineAdapter()
-    models = ModelInfinityAdapter()
+def get_services(dataset_key: str = "india") -> dict[str, Any]:
+    data_dir = ROOT_DIR / "data_india"
+    i360 = I360Adapter(data_path=data_dir / "i360.json")
+    covenant = CovenantGuardAdapter(data_path=data_dir / "covenant_guard.json")
+    xmine = DataXMineAdapter(data_path=data_dir / "data_xmine.json")
+    models = ModelInfinityAdapter(data_path=data_dir / "model_infinity.json")
     graph = SupplyChainGraphEngine(xmine.list_edges())
     financial = FinancialStressEngine(raw_material_share_of_cogs=0.55)
     return {
@@ -141,21 +146,133 @@ def get_services() -> dict[str, Any]:
     }
 
 
-def _get_active_provider_label() -> str:
-    provider = os.getenv("LLM_PROVIDER", "local").strip().lower()
+def _get_active_provider_label(llm_config: dict[str, Any] | None = None) -> str:
+    cfg = llm_config or {}
+    provider = str(cfg.get("provider") or os.getenv("LLM_PROVIDER", "local")).strip().lower()
     if provider == "gemini":
-        model = (os.getenv("GEMINI_MODEL") or os.getenv("gemini_model") or "gemini-3.8-flash").strip()
+        model = str(cfg.get("model") or os.getenv("GEMINI_MODEL") or os.getenv("gemini_model") or "gemini-3.8-flash").strip()
         return f"LLM: Gemini · {model}"
     if provider == "groq":
-        model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile").strip()
+        model = str(cfg.get("model") or os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")).strip()
         return f"LLM: Groq · {model}"
-    model = os.getenv("LOCAL_LLM_MODEL", "llama3.1").strip()
+    model = str(cfg.get("model") or os.getenv("LOCAL_LLM_MODEL", "llama3.1")).strip()
     return f"LLM: Local · {model}"
+
+
+def _render_llm_sidebar() -> dict[str, Any]:
+    """Sidebar configuration allowing runtime LLM provider, model, and API key overrides."""
+    default_provider = os.getenv("LLM_PROVIDER", "gemini").strip().lower()
+    if default_provider not in ("gemini", "groq", "local"):
+        default_provider = "gemini"
+
+    provider_defaults = {
+        "gemini": (os.getenv("GEMINI_MODEL") or os.getenv("gemini_model") or "gemini-3.1-flash-lite").strip(),
+        "groq": os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile").strip(),
+        "local": os.getenv("LOCAL_LLM_MODEL", "llama3.1").strip(),
+    }
+
+    with st.sidebar:
+        st.header("AI Model Configuration")
+        st.caption("Decoupled provider settings. Leave API Key blank to use your `.env` / Secrets value.")
+        providers = ["gemini", "groq", "local"]
+        selected_provider = st.selectbox(
+            "LLM Provider",
+            options=providers,
+            index=providers.index(default_provider),
+            format_func=lambda p: {"gemini": "Google Gemini", "groq": "Groq Cloud", "local": "Local Ollama"}[p],
+        )
+        selected_model = st.text_input(
+            "Model Name",
+            value=provider_defaults[selected_provider],
+            help="e.g. gemini-3.1-flash-lite, llama-3.3-70b-versatile, or llama3.1",
+        )
+        api_key_override = st.text_input(
+            "API Key (Optional Override)",
+            value="",
+            type="password",
+            placeholder="Using .env key if blank",
+        )
+        base_url_override = ""
+        max_tokens_override: int | None = None
+        if selected_provider == "local":
+            base_url_override = st.text_input(
+                "Ollama Base URL",
+                value=os.getenv("LOCAL_LLM_BASE_URL", "http://localhost:11434/v1"),
+            )
+        elif selected_provider == "groq":
+            max_tokens_override = int(
+                st.number_input(
+                    "Max Completion Tokens",
+                    min_value=128,
+                    max_value=8192,
+                    value=int(os.getenv("GROQ_MAX_TOKENS", "512") or 512),
+                    step=128,
+                )
+            )
+
+    return {
+        "provider": selected_provider,
+        "model": selected_model.strip() or provider_defaults[selected_provider],
+        "api_key": api_key_override.strip() or None,
+        "base_url": base_url_override.strip() or None,
+        "max_tokens": max_tokens_override,
+    }
+
+
+def _short_company_label(company_name: str, fallback: str) -> str:
+    base = company_name.split(" (")[0].strip()
+    for suffix in (" Developers Ltd", " India Ltd", " Intl", " Ltd"):
+        if base.endswith(suffix):
+            base = base[: -len(suffix)]
+    return base or fallback
+
+
+def _friendly_agent_label(executor_id: str) -> str:
+    mapping = {
+        "shockanalyst": "Step 1: Understand the Price Spike",
+        "exposureinvestigator": "Step 2: Calculate Domino Impact",
+        "riskchallenger": "Step 3: Spot Data Gaps & Risks",
+        "reportsynthesizer": "Step 4: Write Summary Report",
+    }
+    return mapping.get(executor_id.strip().lower(), executor_id)
+
+
+def _build_company_story(sel: dict[str, Any]) -> list[str]:
+    """Generates 3 plain-English bullet points explaining a company's risk story."""
+    name = _short_company_label(str(sel.get("company_name", "")), str(sel.get("company_id", "")))
+    hop = int(sel.get("hop", -1))
+    if hop == 0:
+        why = f"**Why It's Affected:** {name} is hit **directly** by the {sel['effective_shock_pct']}% cost increase in {sel['sector']}."
+    elif hop >= 1:
+        why = (
+            f"**Why It's Affected:** {name} sits **{hop} step(s) downstream** (`{sel['path']}`), "
+            f"absorbing an estimated **{sel['effective_shock_pct']}%** effective cost increase."
+        )
+    else:
+        why = f"**Why It's Affected:** {name} is **not connected** to this supply chain path within the selected depth."
+
+    money = (
+        f"**Money Impact:** Operating profit buffer moves from **₹{sel['base_ebitda_cr']:,.1f} Cr** to "
+        f"**₹{sel['stressed_ebitda_cr']:,.1f} Cr**, shifting its loan safety ratio from **{sel['base_dscr']:.2f}x** "
+        f"to **{sel['stressed_dscr']:.2f}x** (bank minimum: **{sel['covenant_min_dscr']:.2f}x**)."
+    )
+
+    ev_list = sel.get("evidence") or []
+    if ev_list:
+        ev_refs = ", ".join(
+            f"`{e.get('doc_id')}` (conf {float(e.get('confidence', 0.0)):.2f})"
+            for e in ev_list
+        )
+        proof = f"**Source Proof:** Backed by filing evidence {ev_refs}."
+    else:
+        proof = "**Source Proof:** No direct supply-link filing triggered for this scenario."
+
+    return [why, money, proof]
 
 
 def build_dscr_comparison_figure(rows: list[dict[str, Any]]) -> go.Figure:
     """Dark-themed grouped bar chart comparing Base DSCR, Stressed DSCR, and Min Covenant."""
-    names = [r["company_id"] for r in rows]
+    names = [_short_company_label(str(r.get("company_name", "")), r["company_id"]) for r in rows]
     base_vals = [float(r.get("base_dscr", 0.0)) for r in rows]
     stressed_vals = [float(r.get("stressed_dscr", 0.0)) for r in rows]
     min_vals = [float(r.get("covenant_min_dscr", 0.0)) for r in rows]
@@ -450,7 +567,15 @@ def build_contagion_figure(
         node_colors.append(col)
         node_sizes.append(size)
         node_borders.append(border_col)
-        node_labels.append(f"{cid}<br>DSCR {r.get('stressed_dscr', 'N/A')}")
+        short_name = _short_company_label(str(r.get("company_name", "")), cid)
+        dscr_val = r.get("stressed_dscr", "N/A")
+        if r.get("covenant_breach"):
+            status_tag = f"🔴 AT RISK ({dscr_val}x)"
+        elif r.get("prior_covenant_status") == "WATCH":
+            status_tag = f"🟡 WATCH ({dscr_val}x)"
+        else:
+            status_tag = f"🟢 SAFE ({dscr_val}x)"
+        node_labels.append(f"{short_name}<br>{status_tag}")
         node_hovers.append(
             f"<b>{r.get('company_name', cid)} ({cid})</b><br>"
             f"Sector: {r.get('sector', 'N/A')} | Hop: {hop}<br>"
@@ -491,29 +616,29 @@ def build_contagion_figure(
             "font": {"size": 15, "color": "#F8FAFC"},
         },
         xaxis={"showgrid": False, "zeroline": False, "showticklabels": False, "range": [-0.8, 5.2]},
-        yaxis={"showgrid": False, "zeroline": False, "showticklabels": False, "range": [-2.1, 4.35]},
-        height=470,
+        yaxis={"showgrid": False, "zeroline": False, "showticklabels": False, "range": [-4.2, 5.15]},
+        height=580,
         margin={"l": 14, "r": 14, "t": 50, "b": 14},
         plot_bgcolor="#0F172A",
         paper_bgcolor="#0F172A",
         annotations=[
             {
                 "x": 0.0,
-                "y": 4.05,
-                "text": "<b>Hop 0</b><br>Direct Shock",
+                "y": 4.55,
+                "text": "<b>Hop 0</b><br>Direct Impact",
                 "showarrow": False,
                 "font": {"size": 11, "color": "#94A3B8"},
             },
             {
                 "x": 2.2,
-                "y": 4.05,
+                "y": 4.55,
                 "text": "<b>Hop 1</b><br>Tier-1 Suppliers",
                 "showarrow": False,
                 "font": {"size": 11, "color": "#94A3B8"},
             },
             {
                 "x": 4.4,
-                "y": 4.05,
+                "y": 4.55,
                 "text": "<b>Hop 2</b><br>OEMs & Metro",
                 "showarrow": False,
                 "font": {"size": 11, "color": "#94A3B8"},
@@ -523,9 +648,12 @@ def build_contagion_figure(
     return fig
 
 
-async def _execute_workflow_trace(prompt: str) -> tuple[list[dict[str, str]], str]:
+async def _execute_workflow_trace(
+    prompt: str,
+    llm_config: dict[str, Any] | None = None,
+) -> tuple[list[dict[str, str]], str]:
     """Runs the MAF SequentialBuilder workflow and captures step-by-step agent traces."""
-    workflow = build_contagion_workflow()
+    workflow = build_contagion_workflow(llm_config=llm_config)
     step_logs: list[dict[str, str]] = []
     report_chunks: list[str] = []
     final_report = ""
@@ -563,17 +691,20 @@ async def _execute_workflow_trace(prompt: str) -> tuple[list[dict[str, str]], st
     return step_logs, final_report
 
 
-def run_workflow_sync(prompt: str) -> tuple[list[dict[str, str]], str]:
+def run_workflow_sync(
+    prompt: str,
+    llm_config: dict[str, Any] | None = None,
+) -> tuple[list[dict[str, str]], str]:
     try:
         loop = asyncio.get_event_loop()
         if loop.is_running():
             import concurrent.futures
 
             with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
-                return pool.submit(asyncio.run, _execute_workflow_trace(prompt)).result()
+                return pool.submit(asyncio.run, _execute_workflow_trace(prompt, llm_config=llm_config)).result()
     except RuntimeError:
         pass
-    return asyncio.run(_execute_workflow_trace(prompt))
+    return asyncio.run(_execute_workflow_trace(prompt, llm_config=llm_config))
 
 
 def _inject_premium_theme() -> None:
@@ -644,21 +775,37 @@ def _inject_premium_theme() -> None:
     )
 
 
+def _sync_streamlit_secrets() -> None:
+    """Loads top-level Streamlit Cloud secrets into os.environ when deployed."""
+    try:
+        for key, value in st.secrets.items():
+            if isinstance(value, str) and key not in os.environ:
+                os.environ[key] = value
+    except Exception:
+        pass
+
+
 def main() -> None:
+    _sync_streamlit_secrets()
+    os.environ["CONTAGIONIQ_DATA_DIR"] = str(ROOT_DIR / "data_india")
     st.set_page_config(
         page_title="ContagionIQ — Supply Chain & Credit Contagion Workbench",
         layout="wide",
     )
     _inject_premium_theme()
 
-    services = get_services()
+    services = get_services("india")
     i360: I360Adapter = services["i360"]
     xmine: DataXMineAdapter = services["xmine"]
     all_companies = i360.list_companies()
     company_options = [f"{c.company_id} — {c.company_name}" for c in all_companies]
     id_by_option = {f"{c.company_id} — {c.company_name}": c.company_id for c in all_companies}
 
-    if "stress_rows" not in st.session_state:
+    expected_ids = {c.company_id for c in all_companies}
+    if (
+        "stress_rows" not in st.session_state
+        or {r.get("company_id") for r in st.session_state["stress_rows"]} != expected_ids
+    ):
         st.session_state["stress_rows"] = compute_full_stress_table(services, shock_pct=20.0)
     if "agent_traces" not in st.session_state:
         st.session_state["agent_traces"] = []
@@ -671,7 +818,8 @@ def main() -> None:
     if "last_duration_sec" not in st.session_state:
         st.session_state["last_duration_sec"] = 0.0
 
-    provider_badge = _get_active_provider_label()
+    llm_config = _render_llm_sidebar()
+    provider_badge = _get_active_provider_label(llm_config)
     st.markdown(
         f"""
         <div class="ciq-hero">
@@ -752,7 +900,7 @@ def main() -> None:
         st.session_state["stress_rows"] = computed_rows
         with st.status("Running 4-Agent Sequential Workflow (ShockAnalyst -> ExposureInvestigator -> RiskChallenger -> ReportSynthesizer)...", expanded=True) as status_box:
             try:
-                traces, report = run_workflow_sync(prompt_text)
+                traces, report = run_workflow_sync(prompt_text, llm_config=llm_config)
                 duration_sec = time.perf_counter() - t0
                 st.session_state["agent_traces"] = traces
                 st.session_state["final_report"] = report
@@ -829,9 +977,38 @@ def main() -> None:
     st.info(
         f"**Plain-English Summary:** A **{float(shock_override):.0f}%** raw-material price spike puts "
         f"**{breach_count} of {len(rows)} companies** below their bank loan safety buffer "
-        f"(**{direct_breaches}** direct steel producers and **{downstream_breaches}** downstream suppliers/builders), "
-        f"while **{safe_count}** larger end-customers remain financially safe."
+        f"(**{direct_breaches}** direct producers and **{downstream_breaches}** downstream suppliers/builders), "
+        f"while **{safe_count}** companies remain financially safe."
     )
+
+    at_risk_names = [
+        _short_company_label(str(r.get("company_name", "")), r["company_id"])
+        for r in rows
+        if r.get("covenant_breach")
+    ]
+    watch_names = [
+        _short_company_label(str(r.get("company_name", "")), r["company_id"])
+        for r in rows
+        if not r.get("covenant_breach") and r.get("prior_covenant_status") == "WATCH"
+    ]
+    safe_names = [
+        _short_company_label(str(r.get("company_name", "")), r["company_id"])
+        for r in rows
+        if not r.get("covenant_breach") and r.get("prior_covenant_status") != "WATCH"
+    ]
+    b1, b2, b3 = st.columns(3)
+    with b1:
+        with st.container(border=True):
+            st.markdown(f"**🔴 At Risk ({len(at_risk_names)})**")
+            st.caption(", ".join(at_risk_names) if at_risk_names else "None")
+    with b2:
+        with st.container(border=True):
+            st.markdown(f"**🟡 Watch Closely ({len(watch_names)})**")
+            st.caption(", ".join(watch_names) if watch_names else "None")
+    with b3:
+        with st.container(border=True):
+            st.markdown(f"**🟢 Safe ({len(safe_names)})**")
+            st.caption(", ".join(safe_names) if safe_names else "None")
 
     with st.expander("Plain-English Guide: What Do These Terms Mean?", expanded=False):
         st.markdown(
@@ -912,6 +1089,11 @@ def main() -> None:
     )
     st.caption(f"Plain-English Verdict for **{sel['company_name']}**: {verdict}")
 
+    with st.container(border=True):
+        st.markdown(f"**3-Point Story for {_short_company_label(str(sel.get('company_name', '')), selected_cid)}**")
+        for bullet in _build_company_story(sel):
+            st.markdown(f"- {bullet}")
+
     t_path, t_fin, t_cov, t_doc, t_mod = st.tabs(
         [
             "Graph Paths & Pass-Through",
@@ -969,7 +1151,7 @@ def main() -> None:
     st.divider()
 
     # Section 3: Portfolio-Wide Deterministic Stress Matrix
-    st.subheader("3. All 10 Companies — Financial Impact Summary")
+    st.subheader("3. All Companies — Financial Impact Summary")
     with st.container(border=True):
         st.plotly_chart(build_dscr_comparison_figure(rows), width="stretch")
 
@@ -987,11 +1169,15 @@ def main() -> None:
                 "Base DSCR": r["base_dscr"],
                 "Stressed DSCR": r["stressed_dscr"],
                 "Min DSCR": r["covenant_min_dscr"],
-                "Breach": r["covenant_breach"],
-                "Plain-English Status": (
-                    "At Risk (Loan Limit Breached)"
+                "Safety Margin Left (%)": (
+                    round(((r["stressed_dscr"] - r["covenant_min_dscr"]) / r["covenant_min_dscr"]) * 100.0, 1)
+                    if r["covenant_min_dscr"] > 0
+                    else 0.0
+                ),
+                "Risk Status": (
+                    "🔴 At Risk"
                     if r["covenant_breach"]
-                    else ("Watch Closely" if r.get("prior_covenant_status") == "WATCH" else "Safe")
+                    else ("🟡 Watch" if r.get("prior_covenant_status") == "WATCH" else "🟢 Safe")
                 ),
                 "WC Drag (₹ Cr)": r["wc_receivables_drag_cr"],
             }
@@ -1012,9 +1198,10 @@ def main() -> None:
     st.subheader("4. AI Investigation Report & Analyst Sign-Off")
 
     if st.session_state["agent_traces"]:
-        with st.expander("Inspect Every Agent & Workflow Event Trace", expanded=False):
+        with st.expander("Inspect Every AI Step", expanded=False):
             for idx, item in enumerate(st.session_state["agent_traces"], start=1):
-                st.markdown(f"**Step {idx} — `{item['executor']}` (`{item['event_type']}`)**")
+                friendly_name = _friendly_agent_label(str(item["executor"]))
+                st.markdown(f"**{friendly_name}** (`{item['executor']}`)")
                 st.markdown(item["content"])
                 st.markdown("---")
     else:
@@ -1193,7 +1380,7 @@ def main() -> None:
     st.caption("Automatically logs every investigation run—execution speed, source filings cited, and human approval status.")
     recent_audit = audit_logger.recent_runs(limit=20)
     if not recent_audit:
-        st.info("No telemetry runs logged yet. Click **Run Contagion Investigation** to record your first audit trace.")
+        st.info("No telemetry runs logged yet. Click **Run Ripple Impact Analysis** to record your first audit trace.")
     else:
         avg_latency = sum(float(r.get("duration_sec", 0.0)) for r in recent_audit) / len(recent_audit)
         o1, o2, o3, o4 = st.columns(4)
