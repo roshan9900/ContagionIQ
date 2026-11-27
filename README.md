@@ -4,6 +4,24 @@
 
 ---
 
+## Project Background & Motivation
+
+### Why We Selected This Project
+* **Siloed Risk Monitoring Misses Domino Effects**: Traditional credit and Early Warning Signal (EWS) systems evaluate each borrower's financial ratios independently. When an upstream raw-material price spike hits a Tier-0 producer, credit teams often discover the downstream impact on Tier-1 suppliers and Tier-2 OEMs/contractors only after quarterly filings lag behind.
+* **Bridging Cross-Silo Intelligence**: ContagionIQ unifies four existing **CRISIL** enterprise risk platforms into a single, explainable workflow:
+  * **CRISIL `i360`** ([`adapters/i360.py`](adapters/i360.py)): Macro-to-micro research, data, and impact-analytics platform—modeled here to provide core corporate financials (revenue, EBITDA, debt, cash, debt service, working-capital days, base DSCR) and macro/sector shock feeds.
+  * **CRISIL `Covenant Guard`** ([`adapters/covenant_guard.py`](adapters/covenant_guard.py)): Credit risk and covenant monitoring platform (under Integral IQ)—tracks bank loan covenant thresholds, headroom percentages, compliance status (`COMPLIANT`, `WATCH`, `BREACH`), and Early Warning Signal (EWS) alerts.
+  * **CRISIL `Data XMine`** ([`adapters/data_xmine.py`](adapters/data_xmine.py)): Intelligent document extraction and digitization engine—modeled here to extract supply-chain relationships, dependency percentages, and cited evidence quotes with confidence scores from annual reports, credit filings, and rating notes.
+  * **CRISIL `Model Infinity`** ([`adapters/model_infinity.py`](adapters/model_infinity.py)): Enterprise Model Risk Management (MRM) repository and governance platform—tracks model validation status (`APPROVED`, `CONDITIONAL`), known calibration limitations, and drift/performance metrics (`PSI`, `Gini`, `KS`).
+* **Deterministic Math + Auditable AI**: Instead of letting an LLM guess financial numbers, ContagionIQ pairs deterministic Pandas/NetworkX engines with a 4-agent AI review (`RiskChallenger` + `ReportSynthesizer`) and a human-in-the-loop (HITL) sign-off gate.
+
+### Why We Used Synthetic Data
+* **Data Privacy & Compliance**: Real corporate loan books, borrower financials, covenant thresholds, and EWS alerts are confidential. Synthetic JSON datasets (`data/*.json`) allow full end-to-end development and live demos without exposing proprietary or sensitive client information.
+* **Controlled, Reproducible Edge Cases**: The 10-company synthetic dataset is purposefully designed to exercise real-world credit-risk edge cases—including an already-stressed borrower (`AUTO_SUP_B`), a borrower on `WATCH` (`INFRA_A`), stale `FY2024` filings (`DX-8871`, `DX-9021`), low-confidence supply links (`DX-9104` at `0.74`), and conditional model drift (`EWS_COVENANT_V3`).
+* **Clean Adapter Abstraction**: All data is accessed through Pydantic-validated adapters (`adapters/`), so synthetic JSON files can be swapped for live databases or enterprise APIs post-demo without changing the core stress engine or agent workflow.
+
+---
+
 ## Key Capabilities
 
 * **Deterministic Financial & Graph Engines (Zero LLM Number Guessing)**
