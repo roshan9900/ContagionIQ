@@ -38,6 +38,9 @@
   * **Observability & Audit Telemetry**: [`InvestigationAuditLogger`](observability/audit.py) appends structured JSONL telemetry (run ID, UTC timestamp, latency, cited `DX-*` documents, breaches, HITL status) to `logs/investigation_audit.jsonl`.
 * **Multi-Provider LLM Support**
   * Supports **Google Gemini** (`GeminiChatClient`), **Groq** (`OpenAIChatCompletionClient`), and **Local Ollama** (`OpenAIChatClient`).
+* **Verified Test Suite & Complete Documentation**
+  * **14/14 passing unit tests** (`tests/`) covering financial stress math, 2-hop graph traversal, tool validation, CLI rendering, persistent history filters, and JSONL audit logging.
+  * Full documentation across [`README.md`](README.md) and [`UI_GUIDE.md`](UI_GUIDE.md) (plain-English guide to every chart, KPI, and report section).
 
 ---
 
