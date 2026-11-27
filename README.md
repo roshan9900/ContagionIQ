@@ -15,10 +15,10 @@
   * **CRISIL `Model Infinity`** ([`adapters/model_infinity.py`](adapters/model_infinity.py)): Enterprise Model Risk Management (MRM) repository and governance platform—tracks model validation status (`APPROVED`, `CONDITIONAL`), known calibration limitations, and drift/performance metrics (`PSI`, `Gini`, `KS`).
 * **Deterministic Math + Auditable AI**: Instead of letting an LLM guess financial numbers, ContagionIQ pairs deterministic Pandas/NetworkX engines with a 4-agent AI review (`RiskChallenger` + `ReportSynthesizer`) and a human-in-the-loop (HITL) sign-off gate.
 
-### Why We Used Synthetic Data
-* **Data Privacy & Compliance**: Real corporate loan books, borrower financials, covenant thresholds, and EWS alerts are confidential. Synthetic JSON datasets (`data/*.json`) allow full end-to-end development and live demos without exposing proprietary or sensitive client information.
-* **Controlled, Reproducible Edge Cases**: The 10-company synthetic dataset is purposefully designed to exercise real-world credit-risk edge cases—including an already-stressed borrower (`AUTO_SUP_B`), a borrower on `WATCH` (`INFRA_A`), stale `FY2024` filings (`DX-8871`, `DX-9021`), low-confidence supply links (`DX-9104` at `0.74`), and conditional model drift (`EWS_COVENANT_V3`).
-* **Clean Adapter Abstraction**: All data is accessed through Pydantic-validated adapters (`adapters/`), so synthetic JSON files can be swapped for live databases or enterprise APIs post-demo without changing the core stress engine or agent workflow.
+### Real Indian Public Company Dataset (`data_india/`)
+* **Moved from Synthetic to Real Public Data**: ContagionIQ runs exclusively on **14 verified FY2025 Indian listed companies (NSE/BSE)** across **6 interconnected sectors** (`Energy & Mining`, `Steel`, `Cement & Materials`, `Auto Components`, `Auto OEMs`, and `Infrastructure`) stored in `data_india/`.
+* **Verified Financials & Supply Disclosures**: Consolidated FY25 financials (revenue, EBITDA, debt, cash) come from audited public company filings for **Coal India**, **NTPC**, **Tata Steel**, **JSW Steel**, **UltraTech Cement**, **Ambuja Cements**, **Bharat Forge**, **Samvardhana Motherson**, **Sundram Fasteners**, **Maruti Suzuki**, **Tata Motors**, **Dilip Buildcon**, **IRB Infrastructure**, and **Larsen & Toubro**, paired with 16 annual-report/procurement disclosures and 17 supply-chain edges.
+* **Clean Adapter Abstraction**: All data is accessed through Pydantic-validated adapters (`adapters/`), with bank covenant floors (`Covenant Guard`) and model-risk metadata (`Model Infinity`) calibrated to realistic public-filing benchmarks—ready to swap directly for live enterprise databases or APIs post-demo.
 
 ---
 
